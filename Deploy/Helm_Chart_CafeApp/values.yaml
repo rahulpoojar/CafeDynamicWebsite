@@ -3,7 +3,7 @@
 replicaCount: 2
 
 mysql:
-  image: "mysql:latest"
+  image: "sreedocker123/mompopcafedb:v1"
   rootPassword: "Msois@123"
   database: "mom_pop_db"
   user: "root"
