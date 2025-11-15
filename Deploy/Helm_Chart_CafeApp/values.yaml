@@ -1,15 +1,15 @@
 # Base values file for the Helm chart
 
-replicaCount: 1
+replicaCount: 2
 
 mysql:
-  image: "sreedocker123/mompopcafedb:v1"
+  image: "mysql:latest"
   rootPassword: "Msois@123"
   database: "mom_pop_db"
   user: "root"
 
 cafeweb:
-  image: "sreedocker123/mompopcafeapp"
+  image: "amulya2503/mompopcafeapp"
   tag: "v1"
 
 persistentVolume:
@@ -17,7 +17,7 @@ persistentVolume:
   hostPath: "/mnt/data/default"
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 80
 
 nodeSelector: {}
