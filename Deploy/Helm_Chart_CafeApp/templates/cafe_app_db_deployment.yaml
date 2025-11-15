@@ -28,6 +28,8 @@ spec:
               key: password
         - name: MYSQL_DATABASE
           value: {{ .Values.mysql.database }}
+        - name: MYSQL_USER
+          value: {{ .Values.mysql.user }}   # REQUIRED FIX
         ports:
         - containerPort: 3306
           name: mysql
@@ -38,4 +40,3 @@ spec:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-mysql-pv-claim
-
