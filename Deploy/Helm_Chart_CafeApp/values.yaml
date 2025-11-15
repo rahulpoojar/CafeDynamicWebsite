@@ -3,7 +3,7 @@
 replicaCount: 2
 
 mysql:
-  image: "mysql:latest"
+  image: "mysql:5.7"
   rootPassword: "Msois@123"
   database: "mom_pop_db"
   user: "root"
