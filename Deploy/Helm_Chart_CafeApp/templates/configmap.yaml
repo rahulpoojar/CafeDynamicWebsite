@@ -10,9 +10,10 @@ data:
     $showServerInfo = "{{ .Values.config.showServerInfo }}";
     $timeZone = "{{ .Values.config.timeZone }}";
     $currency = "{{ .Values.config.currency }}";
-    $db_url = "{{ .Values.config.db_url }}";
-    $db_name = "{{ .Values.config.db_name }}";
-    $db_user = "{{ .Values.config.db_user }}";
-    $db_password = "{{ .Values.config.db_password }}";
-    ?>
 
+    // Pull correct DB host from Kubernetes environment variables
+    $db_url = getenv('MYSQL_HOST');
+    $db_name = getenv('MYSQL_DATABASE');
+    $db_user = getenv('MYSQL_USER');
+    $db_password = getenv('MYSQL_ROOT_PASSWORD');
+    ?>
