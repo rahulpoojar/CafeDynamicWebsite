@@ -6,7 +6,7 @@ metadata:
     app: cafeapp
 spec:
   capacity:
-    storage: {{ .Values.persistentVolume.size }}
+    storage: {{ .Values.persistentVolume.storageSize }}
   accessModes:
     - ReadWriteOnce
   hostPath:
