@@ -1,61 +1,53 @@
+# values.yaml
+```yaml
 fullnameOverride: "mompopcafe"
-
 
 namespace: default
 
-
 image:
-web:
-repository: amulya2503/mompopcafeapp
-tag: v1
-pullPolicy: IfNotPresent
-mysql:
-repository: sreedocker123/mompopcafedb
-tag: v1
-pullPolicy: IfNotPresent
-
+  web:
+    repository: amulya2503/mompopcafeapp
+    tag: v1
+    pullPolicy: IfNotPresent
+  mysql:
+    repository: sreedocker123/mompopcafedb
+    tag: v1
+    pullPolicy: IfNotPresent
 
 replicaCount:
-web: 1
-mysql: 1
-
+  web: 1
+  mysql: 1
 
 mysql:
-rootPassword: Msois@123 # plaintext here. For production, override with a Kubernetes Secret or provide via ArgoCD secret management
-database: mom_pop_db
-serviceName: mysql
-port: 3306
-persistence:
-enabled: true
-storage: 20Gi
-hostPath: /mnt/cafe/data
-
+  rootPassword: Msois@123   # plaintext here. For production, override with a Kubernetes Secret or provide via ArgoCD secret management
+  database: mom_pop_db
+  serviceName: mysql
+  port: 3306
+  persistence:
+    enabled: true
+    storage: 20Gi
+    hostPath: /mnt/cafe/data
 
 php:
-persistence:
-enabled: true
-storage: 1Gi
-hostPath: /mnt/data/php
-
+  persistence:
+    enabled: true
+    storage: 1Gi
+    hostPath: /mnt/data/php
 
 service:
-web:
-type: NodePort
-port: 80
-nodePort:  # optional; remove to let k8s allocate
-
+  web:
+    type: NodePort
+    port: 80
+    nodePort: 30080 # optional; remove to let k8s allocate
 
 mysql:
-headless: true
-
+  headless: true
 
 resources: {}
 
-
 nodeSelector: {}
-
 
 tolerations: []
 
-
 affinity: {}
+```
