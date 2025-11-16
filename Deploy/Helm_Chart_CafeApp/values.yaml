@@ -1,5 +1,4 @@
-# values.yaml
-```yaml
+
 fullnameOverride: "mompopcafe"
 
 namespace: default
@@ -50,4 +49,4 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-```
+
