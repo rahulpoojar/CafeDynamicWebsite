@@ -1,13 +1,13 @@
+{{- if .Values.mysql.persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-mysql-pv-claim
-  labels:
-    app: cafeapp
+name: {{ include "mompopcafe.fullname" . }}-mysql-pv-claim
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ .Values.persistentVolume.storageSize }}
-
+accessModes:
+- ReadWriteOnce
+resources:
+requests:
+storage: {{ .Values.mysql.persistence.storage }}
+---
+{{- end }}
