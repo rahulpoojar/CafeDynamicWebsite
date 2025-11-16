@@ -1,33 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mompopcafe.fullname" . }}-web
-  labels:
-    app: {{ include "mompopcafe.fullname" . }}
+  name: cafeweb
 spec:
-  replicas: {{ .Values.replicaCount.web }}
+  replicas: {{ .Values.replicas.web }}
+
   selector:
     matchLabels:
-      app: {{ include "mompopcafe.fullname" . }}
+      app: cafeapp
       tier: frontend
   template:
     metadata:
       labels:
-        app: {{ include "mompopcafe.fullname" . }}
+        app: cafeapp
         tier: frontend
     spec:
       volumes:
       - name: app-config-volume
         configMap:
-          name: {{ include "mompopcafe.fullname" . }}-app-config
+          name: app-config
+
       containers:
       - name: cafeweb
-        image: "{{ .Values.image.web.repository }}:{{ .Values.image.web.tag }}"
-        imagePullPolicy: {{ .Values.image.web.pullPolicy }}
+        image: {{ .Values.image.web }}
         volumeMounts:
         - name: app-config-volume
           mountPath: /var/www/html/getAppParameters.php
           subPath: getAppParameters.php
         ports:
         - containerPort: 80
-          name: cafeweb
