@@ -1,32 +1,61 @@
-# Base values file for the Helm chart
+fullnameOverride: "mompopcafe"
 
-replicaCount: 2
+
+namespace: default
+
+
+image:
+web:
+repository: amulya2503/mompopcafeapp
+tag: v1
+pullPolicy: IfNotPresent
+mysql:
+repository: sreedocker123/mompopcafedb
+tag: v1
+pullPolicy: IfNotPresent
+
+
+replicaCount:
+web: 1
+mysql: 1
+
 
 mysql:
-  image: "mysql:5.7"
-  rootPassword: "Msois@123"
-  database: "mom_pop_db"
-  user: "root"
+rootPassword: Msois@123 # plaintext here. For production, override with a Kubernetes Secret or provide via ArgoCD secret management
+database: mom_pop_db
+serviceName: mysql
+port: 3306
+persistence:
+enabled: true
+storage: 20Gi
+hostPath: /mnt/cafe/data
 
-cafeweb:
-  image: "amulya2503/mompopcafeapp"
-  tag: "v1"
 
-persistentVolume:
-  storageSize: "20Gi"
-  hostPath: "/mnt/data/default"
+php:
+persistence:
+enabled: true
+storage: 1Gi
+hostPath: /mnt/data/php
+
 
 service:
-  type: NodePort
-  port: 80
+web:
+type: NodePort
+port: 80
+nodePort:  # optional; remove to let k8s allocate
+
+
+mysql:
+headless: true
+
+
+resources: {}
+
 
 nodeSelector: {}
 
+
 tolerations: []
 
-affinity: []
 
-config:
-  showServerInfo: "false"
-  timeZone: "America/New_York"
-  currency: "$"
+affinity: {}
