@@ -1,4 +1,3 @@
-# templates/configmap.yaml
 ```gotmpl
 apiVersion: v1
 kind: ConfigMap
