@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-name: {{ include "mompopcafe.fullname" . }}-mysql-pv
+  name: {{ include "mompopcafe.fullname" . }}-mysql-pv
 spec:
-capacity:
-storage: {{ .Values.mysql.persistence.storage }}
-accessModes:
-- ReadWriteOnce
-hostPath:
-path: {{ .Values.mysql.persistence.hostPath | quote }}
+  capacity:
+    storage: {{ .Values.mysql.persistence.storage }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.mysql.persistence.hostPath | quote }}
 ---
 {{- end }}
