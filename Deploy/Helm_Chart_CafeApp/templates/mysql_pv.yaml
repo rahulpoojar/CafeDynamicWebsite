@@ -1,14 +1,14 @@
+{{- if .Values.mysql.persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Release.Name }}-mysql-pv
-  labels:
-    app: cafeapp
+name: {{ include "mompopcafe.fullname" . }}-mysql-pv
 spec:
-  capacity:
-    storage: {{ .Values.persistentVolume.storageSize }}
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: {{ .Values.persistentVolume.hostPath }}
-
+capacity:
+storage: {{ .Values.mysql.persistence.storage }}
+accessModes:
+- ReadWriteOnce
+hostPath:
+path: {{ .Values.mysql.persistence.hostPath | quote }}
+---
+{{- end }}
