@@ -1,42 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mompopcafe.fullname" . }}-mysql
-  labels:
-    app: {{ include "mompopcafe.fullname" . }}
+  name: mysql
 spec:
-  replicas: {{ .Values.replicaCount.mysql }}
-  selector:
-    matchLabels:
-      app: {{ include "mompopcafe.fullname" . }}
-      tier: mysql
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      app: cafeapp
   template:
     metadata:
       labels:
-        app: {{ include "mompopcafe.fullname" . }}
-        tier: mysql
+        app: cafeapp
     spec:
       containers:
       - name: mysql
-        image: "{{ .Values.image.mysql.repository }}:{{ .Values.image.mysql.tag }}"
-        imagePullPolicy: {{ .Values.image.mysql.pullPolicy }}
+        image: {{ .Values.image.db }}
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ include "mompopcafe.fullname" . }}-mysql-pass
+              name: mysql-pass
               key: password
         - name: MYSQL_DATABASE
-          value: "{{ .Values.mysql.database }}"
+          value: {{ .Values.mysql.database }}
         ports:
-        - containerPort: {{ .Values.mysql.port }}
-          name: mysql
+        - containerPort: 3306
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysql-storage
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysql-storage
         persistentVolumeClaim:
-          claimName: {{ include "mompopcafe.fullname" . }}-mysql-pv-claim
+          claimName: mysql-pv-claim
