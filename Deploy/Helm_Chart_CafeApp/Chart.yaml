@@ -1,6 +1,6 @@
 apiVersion: v2
-name: cafedynamicapp
-description: A Helm chart for Cafe_dynamic_website
+name: mompopcafe
+description: Helm chart for Mom & Pop Cafe demo (web + mysql)
 type: application
 version: 0.1.0
-appVersion: "v1"
+appVersion: "1.0"
