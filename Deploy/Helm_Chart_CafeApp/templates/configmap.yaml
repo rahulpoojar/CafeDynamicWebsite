@@ -1,19 +1,17 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-cafeweb-config
-  labels:
-    app: cafeapp
+name: {{ include "mompopcafe.fullname" . }}-app-config
 data:
-  getAppParameters.php: |
-    <?php
-    $showServerInfo = "{{ .Values.config.showServerInfo }}";
-    $timeZone = "{{ .Values.config.timeZone }}";
-    $currency = "{{ .Values.config.currency }}";
-
-    // Pull correct DB host from Kubernetes environment variables
-    $db_url = getenv('MYSQL_HOST');
-    $db_name = getenv('MYSQL_DATABASE');
-    $db_user = getenv('MYSQL_USER');
-    $db_password = getenv('MYSQL_ROOT_PASSWORD');
-    ?>
+getAppParameters.php: |-
+{{- $tz := .Values.timeZone }}
+{{- $currency := .Values.currency }}
+{{- $dburl := .Values.mysql.serviceName }}
+{{- printf "%s" "<?php" | indent 2 }}
+{{- printf "%s" "$showServerInfo = \"true\";" | indent 2 }}
+{{- printf "%s" (printf "$timeZone = \"%s\";" (default "America/New_York" $tz)) | indent 2 }}
+{{- printf "%s" (printf "$currency = \"%s\"; // Change currency" (default "£" $currency)) | indent 2 }}
+{{- printf "%s" (printf "$db_url = \"%s\"; // Use MySQL service name for internal DNS resolution" (default "mysql" $dburl)) | indent 2 }}
+{{- printf "%s" (printf "$db_name = \"%s\";" (default "mom_pop_db" .Values.mysql.database)) | indent 2 }}
+{{- printf "%s" (printf "$db_user = \"%s\";" (default "root" .Values.mysql.user)) | indent 2 }}
+{{- printf "%s" (printf "$db_password = \"%s\";" .Values.mysql.rootPassword) | indent 2 }}
