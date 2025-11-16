@@ -1,17 +1,20 @@
+# templates/configmap.yaml
+```gotmpl
 apiVersion: v1
 kind: ConfigMap
 metadata:
-name: {{ include "mompopcafe.fullname" . }}-app-config
+  name: {{ include "mompopcafe.fullname" . }}-app-config
 data:
-getAppParameters.php: |-
+  getAppParameters.php: |-
 {{- $tz := .Values.timeZone }}
 {{- $currency := .Values.currency }}
 {{- $dburl := .Values.mysql.serviceName }}
 {{- printf "%s" "<?php" | indent 2 }}
 {{- printf "%s" "$showServerInfo = \"true\";" | indent 2 }}
 {{- printf "%s" (printf "$timeZone = \"%s\";" (default "America/New_York" $tz)) | indent 2 }}
-{{- printf "%s" (printf "$currency = \"%s\"; // Change currency" (default "£" $currency)) | indent 2 }}
-{{- printf "%s" (printf "$db_url = \"%s\"; // Use MySQL service name for internal DNS resolution" (default "mysql" $dburl)) | indent 2 }}
+{{- printf "%s" (printf "$currency = \"%s\";  // Change currency" (default "£" $currency)) | indent 2 }}
+{{- printf "%s" (printf "$db_url = \"%s\";  // Use MySQL service name for internal DNS resolution" (default "mysql" $dburl)) | indent 2 }}
 {{- printf "%s" (printf "$db_name = \"%s\";" (default "mom_pop_db" .Values.mysql.database)) | indent 2 }}
 {{- printf "%s" (printf "$db_user = \"%s\";" (default "root" .Values.mysql.user)) | indent 2 }}
 {{- printf "%s" (printf "$db_password = \"%s\";" .Values.mysql.rootPassword) | indent 2 }}
+```
