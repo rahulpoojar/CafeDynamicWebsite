@@ -1,4 +1,4 @@
-```gotmpl
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,4 +16,4 @@ data:
 {{- printf "%s" (printf "$db_name = \"%s\";" (default "mom_pop_db" .Values.mysql.database)) | indent 2 }}
 {{- printf "%s" (printf "$db_user = \"%s\";" (default "root" .Values.mysql.user)) | indent 2 }}
 {{- printf "%s" (printf "$db_password = \"%s\";" .Values.mysql.rootPassword) | indent 2 }}
-```
+
