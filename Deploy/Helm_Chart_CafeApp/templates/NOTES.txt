@@ -1,9 +1,3 @@
 To install the chart:
 
-
-helm install mompopcafe ./mompopcafe --namespace {{ .Values.namespace }}
-
-
-Notes:
-- The chart creates PersistentVolumes using hostPath. HostPath PVs are node-specific. For multi-node clusters, create proper StorageClass and remove PV templates.
-- The mysql password is stored in a Secret created by the chart. For production, use external secret management and disable stringData in chart.
+  helm install mompopcafe ./mompopcafe --namespace {{ .Values.namespace }
