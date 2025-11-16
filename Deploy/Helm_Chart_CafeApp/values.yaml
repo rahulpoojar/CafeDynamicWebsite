@@ -3,8 +3,8 @@ image:
   db: "sreedocker123/mompopcafedb:v1"
 
 replicas:
-  web: 1
-  db: 1
+  web: 2
+  db: 2
 
 mysql:
   rootPassword: "Msois@123"
