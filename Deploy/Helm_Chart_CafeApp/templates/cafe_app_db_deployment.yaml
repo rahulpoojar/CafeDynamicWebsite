@@ -1,42 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-mysql
-  labels:
-    app: cafeapp
+name: {{ include "mompopcafe.fullname" . }}-mysql
+labels:
+app: {{ include "mompopcafe.fullname" . }}
 spec:
-  selector:
-    matchLabels:
-      app: cafeapp
-      tier: mysql
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: cafeapp
-        tier: mysql
-    spec:
-      containers:
-      - image: {{ .Values.mysql.image }}
-        name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Release.Name }}-mysql-pass
-              key: password
-        - name: MYSQL_DATABASE
-          value: {{ .Values.mysql.database }}
-        - name: MYSQL_USER
-          value: {{ .Values.mysql.user }}   # REQUIRED FIX
-        ports:
-        - containerPort: 3306
-          name: mysql
-        volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: {{ .Release.Name }}-mysql-pv-claim
+replicas: {{ .Values.replicaCount.mysql }}
+selector:
+matchLabels:
+app: {{ include "mompopcafe.fullname" . }}
+tier: mysql
+strategy:
+type: Recreate
+template:
+metadata:
+labels:
+app: {{ include "mompopcafe.fullname" . }}
+tier: mysql
+spec:
+containers:
+- name: mysql
+image: "{{ .Values.image.mysql.repository }}:{{ .Values.image.mysql.tag }}"
+imagePullPolicy: {{ .Values.image.mysql.pullPolicy }}
+env:
+- name: MYSQL_ROOT_PASSWORD
+valueFrom:
+secretKeyRef:
+name: {{ include "mompopcafe.fullname" . }}-mysql-pass
+key: password
+- name: MYSQL_DATABASE
+value: "{{ .Values.mysql.database }}"
+ports:
+- containerPort: {{ .Values.mysql.port }}
+name: mysql
+volumeMounts:
+- name: mysql-persistent-storage
+mountPath: /var/lib/mysql
+volumes:
+- name: mysql-persistent-storage
+persistentVolumeClaim:
+claimName: {{ include "mompopcafe.fullname" . }}-mysql-pv-claim
