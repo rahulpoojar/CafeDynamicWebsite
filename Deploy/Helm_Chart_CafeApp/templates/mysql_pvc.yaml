@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-name: {{ include "mompopcafe.fullname" . }}-mysql-pv-claim
+  name: {{ include "mompopcafe.fullname" . }}-mysql-pv-claim
 spec:
-accessModes:
-- ReadWriteOnce
-resources:
-requests:
-storage: {{ .Values.mysql.persistence.storage }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mysql.persistence.storage }}
 ---
 {{- end }}
