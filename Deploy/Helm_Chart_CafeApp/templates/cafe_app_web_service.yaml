@@ -1,16 +1,17 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Name }}-cafeweb
+  apiVersion: v1
+  kind: Service
+  metadata:
+  name: {{ include "mompopcafe.fullname" . }}-web
   labels:
-    app: cafeapp
-spec:
-  type: NodePort
+  app: {{ include "mompopcafe.fullname" . }}
+  spec:
+  type: {{ .Values.service.web.type }}
   ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 30080
+  - port: {{ .Values.service.web.port }}
+  targetPort: 80
+  {{- if .Values.service.web.nodePort }}
+  nodePort: {{ .Values.service.web.nodePort }}
+  {{- end }}
   selector:
-    app: cafeapp
-    tier: frontend
-
+  app: {{ include "mompopcafe.fullname" . }}
+  tier: frontend
