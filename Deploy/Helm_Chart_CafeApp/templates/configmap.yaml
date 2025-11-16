@@ -1,18 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "mompopcafe.fullname" . }}-app-config
+  name: app-config
 data:
-  getAppParameters.php: |-
-{{- $tz := .Values.timeZone }}
-{{- $currency := .Values.currency }}
-{{- $dburl := .Values.mysql.serviceName }}
-{{- printf "%s" "<?php" | indent 2 }}
-{{- printf "%s" "$showServerInfo = \"true\";" | indent 2 }}
-{{- printf "%s" (printf "$timeZone = \"%s\";" (default "America/New_York" $tz)) | indent 2 }}
-{{- printf "%s" (printf "$currency = \"%s\";  // Change currency" (default "£" $currency)) | indent 2 }}
-{{- printf "%s" (printf "$db_url = \"%s\";  // Use MySQL service name for internal DNS resolution" (default "mysql" $dburl)) | indent 2 }}
-{{- printf "%s" (printf "$db_name = \"%s\";" (default "mom_pop_db" .Values.mysql.database)) | indent 2 }}
-{{- printf "%s" (printf "$db_user = \"%s\";" (default "root" .Values.mysql.user)) | indent 2 }}
-{{- printf "%s" (printf "$db_password = \"%s\";" .Values.mysql.rootPassword) | indent 2 }}
-
+  getAppParameters.php: |
+    <?php
+    $showServerInfo = "true";
+    $timeZone = "America/New_York";
+    $currency = "£";
+    $db_url = "mysql";
+    $db_name = "mom_pop_db";
+    $db_user = "root";
+    $db_password = "{{ .Values.mysql.rootPassword }}";
