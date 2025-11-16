@@ -1,0 +1,14 @@
+{{- if .Values.php.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+name: {{ include "mompopcafe.fullname" . }}-php-pv
+spec:
+capacity:
+storage: {{ .Values.php.persistence.storage }}
+accessModes:
+- ReadWriteOnce
+hostPath:
+path: {{ .Values.php.persistence.hostPath | quote }}
+---
+{{- end }}
