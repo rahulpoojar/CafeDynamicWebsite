@@ -3,7 +3,7 @@ image:
   db: "sreedocker123/mompopcafedb:v1"
 
 replicas:
-  web: 1
+  web: 2
   db: 1
 
 mysql:
