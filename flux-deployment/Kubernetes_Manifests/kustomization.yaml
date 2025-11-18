@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: flux-cafewebsite
+
+resources:
+  - namespace.yaml
+  - cafe_app_config_map.yaml
+  - cafe_app_db_deployment.yaml
+  - cafe_app_db_service.yaml
+  - cafe_app_pv.yaml
+  - cafe_app_pvc.yaml
+  - cafe_app_web_deployment.yaml
+  - cafe_app_web_service.yaml
+  - mysql-pass.yaml
+  - mysql_pv.yaml
+  - mysql_pvc.yaml
