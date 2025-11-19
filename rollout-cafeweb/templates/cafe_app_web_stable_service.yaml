@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cafe-app.fullname" . }}-stable
+spec:
+  selector:
+    app: cafeweb
+    tier: frontend
+  ports:
+  - port: 80
+    targetPort: http
