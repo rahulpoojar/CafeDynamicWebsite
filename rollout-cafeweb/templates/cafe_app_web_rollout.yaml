@@ -33,16 +33,18 @@ spec:
             name: {{ .Values.configMapName | default "app-config" }}
 
   strategy:
-    canary:
-      steps:
-        - setWeight: 30
-        - pause:
-            duration: 60s
-        - setWeight: 60
-        - pause: {}          # Manual promotion step
-        - setWeight: 100
-      trafficRouting:
-        stableService: {{ include "cafe-app.fullname" . }}-stable
+  canary:
+    canaryService: {{ include "cafe-app.fullname" . }}-canary
+    stableService: {{ include "cafe-app.fullname" . }}-stable
 
-  revisionHistoryLimit: 3
-  progressDeadlineSeconds: 600
+    trafficRouting:
+      nginx:
+        stableIngress: {{ include "cafe-app.fullname" . }}-ingress
+
+    steps:
+      - setWeight: 30
+      - pause:
+          duration: 60s
+      - setWeight: 60
+      - pause: {}   # manual promotion
+      - setWeight: 100
