@@ -1,0 +1,13 @@
+image:
+  web: "amulya2503/mompopcafeapp:v1"
+  db: "sreedocker123/mompopcafedb:v1"
+
+replicas:
+  web: 2
+  db: 1
+
+mysql:
+  rootPassword: "Msois@123"
+  database: "mom_pop_db"
+
+serviceType: NodePort
