@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "cafe-app.fullname" . }}-rollout
+  labels:
+    app: cafeweb
+spec:
+  replicas: {{ .Values.replicas.web }}
+  selector:
+    matchLabels:
+      app: cafeweb
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: cafeweb
+        tier: frontend
+    spec:
+      containers:
+      - name: cafeweb
+        image: "{{ .Values.image.web }}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: app-config-volume
+          mountPath: /var/www/html/getAppParameters.php
+          subPath: getAppParameters.php
+      volumes:
+      - name: app-config-volume
+        configMap:
+          name: {{ .Values.configMapName | default "app-config" }}
+
+  strategy:
+    canary:
+      steps:
+      - setWeight: 30
+      - pause:                     # <-- Manual pause (no duration)
+      - setWeight: 60
+      - pause: {}                  # <-- This explicitly requires manual promotion
+      - setWeight: 100
+
+      trafficRouting:
+        # Using stable service routing (default)
+        # If you want SMI or Istio, I can add it later.
+        stableService: {{ include "cafe-app.fullname" . }}-stable
+
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 600
