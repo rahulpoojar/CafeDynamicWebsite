@@ -6,10 +6,14 @@ metadata:
     app: cafeweb
 spec:
   replicas: {{ .Values.replicas.web }}
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 600
+
   selector:
     matchLabels:
       app: cafeweb
       tier: frontend
+
   template:
     metadata:
       labels:
@@ -32,19 +36,24 @@ spec:
           configMap:
             name: {{ .Values.configMapName | default "app-config" }}
 
+  # ---- START strategy (must be present) ----
   strategy:
-  canary:
-    canaryService: {{ include "cafe-app.fullname" . }}-canary
-    stableService: {{ include "cafe-app.fullname" . }}-stable
+    canary:
+      # must include canaryService and stableService
+      canaryService: {{ include "cafe-app.fullname" . }}-canary
+      stableService:  {{ include "cafe-app.fullname" . }}-stable
 
-    trafficRouting:
-      nginx:
-        stableIngress: {{ include "cafe-app.fullname" . }}-ingress
+      # NGINX traffic routing (Rollouts will update ingress annotations)
+      trafficRouting:
+        nginx:
+          stableIngress: {{ include "cafe-app.fullname" . }}-ingress
 
-    steps:
-      - setWeight: 30
-      - pause:
-          duration: 60s
-      - setWeight: 60
-      - pause: {}   # manual promotion
-      - setWeight: 100
+      # canary steps
+      steps:
+        - setWeight: 30
+        - pause:
+            duration: 60s
+        - setWeight: 60
+        - pause: {}          # manual promotion step
+        - setWeight: 100
+  # ---- END strategy ----
