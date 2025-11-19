@@ -1,10 +1,12 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  name: cafeweb
+  name: {{ include "chart.fullname" . }}-rollout   # Helm safe name, or change to "cafeweb-rollout"
+  labels:
+    app: cafeapp
+    tier: frontend
 spec:
-  replicas: {{ .Values.replicas.web }}
-
+  replicas: {{ .Values.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: cafeapp
@@ -15,17 +17,31 @@ spec:
         app: cafeapp
         tier: frontend
     spec:
-      volumes:
-      - name: app-config-volume
-        configMap:
-          name: app-config
-
       containers:
       - name: cafeweb
-        image: {{ .Values.image.web }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - containerPort: 80
+          name: http
         volumeMounts:
         - name: app-config-volume
           mountPath: /var/www/html/getAppParameters.php
           subPath: getAppParameters.php
-        ports:
-        - containerPort: 80
+      volumes:
+      - name: app-config-volume
+        configMap:
+          name: {{ .Values.configMapName | default "app-config" }}
+  strategy:
+    canary:
+      steps:
+      - setWeight: 30                 # send 30% of traffic to the new ReplicaSet
+      - pause:                         # short automated pause (let metrics settle)
+          duration: 60s
+      - setWeight: 60
+      - pause:                         # manual pause (no duration) -> requires manual promotion
+          # manual pause = empty pause, operator must "kubectl argo rollouts promote"
+      - setWeight: 100
+      trafficRouting: {}               # leave empty to use Service-based routing (stable service)
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
