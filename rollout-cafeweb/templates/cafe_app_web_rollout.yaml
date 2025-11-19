@@ -17,35 +17,31 @@ spec:
         tier: frontend
     spec:
       containers:
-      - name: cafeweb
-        image: "{{ .Values.image.web }}"
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 80
-          name: http
-        volumeMounts:
-        - name: app-config-volume
-          mountPath: /var/www/html/getAppParameters.php
-          subPath: getAppParameters.php
+        - name: cafeweb
+          image: "{{ .Values.image.web }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - name: app-config-volume
+              mountPath: /var/www/html/getAppParameters.php
+              subPath: getAppParameters.php
       volumes:
-      - name: app-config-volume
-        configMap:
-          name: {{ .Values.configMapName | default "app-config" }}
+        - name: app-config-volume
+          configMap:
+            name: {{ .Values.configMapName | default "app-config" }}
 
   strategy:
-  canary:
-    steps:
-      - setWeight: 30
-      - pause:
-          duration: 60s
-      - setWeight: 60
-      - pause: {}
-      - setWeight: 100
-
-
+    canary:
+      steps:
+        - setWeight: 30
+        - pause:
+            duration: 60s
+        - setWeight: 60
+        - pause: {}          # Manual promotion step
+        - setWeight: 100
       trafficRouting:
-        # Using stable service routing (default)
-        # If you want SMI or Istio, I can add it later.
         stableService: {{ include "cafe-app.fullname" . }}-stable
 
   revisionHistoryLimit: 3
