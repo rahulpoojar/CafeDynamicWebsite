@@ -17,3 +17,13 @@ helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/* cafe-app.name */}}
+{{- define "cafe-app.name" -}}
+{{- include "chart.name" . -}}
+{{- end }}
+
+{{/* cafe-app.fullname */}}
+{{- define "cafe-app.fullname" -}}
+{{- include "chart.fullname" . -}}
+{{- end }}
