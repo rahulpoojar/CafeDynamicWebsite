@@ -33,13 +33,15 @@ spec:
           name: {{ .Values.configMapName | default "app-config" }}
 
   strategy:
-    canary:
-      steps:
+  canary:
+    steps:
       - setWeight: 30
-      - pause:                     # <-- Manual pause (no duration)
+      - pause:
+          duration: 60s
       - setWeight: 60
-      - pause: {}                  # <-- This explicitly requires manual promotion
+      - pause: {}
       - setWeight: 100
+
 
       trafficRouting:
         # Using stable service routing (default)
