@@ -1,4 +1,4 @@
-apiVersion: v2
+apiVersion: v3
 name: cafe-app
 description: Helm chart for Cafe Web App + MySQL
 type: application
