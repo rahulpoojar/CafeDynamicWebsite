@@ -2,8 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: mysql-pv
-spec:
-  storageClassName: ""   
+spec:   
   capacity:
     storage: 20Gi
   accessModes:
